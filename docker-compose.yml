@@ -9,5 +9,7 @@ services:
     build:
       context: ./app
       dockerfile: Dockerfile
+    tty: true
+    stdin_open: true
     depends_on:
       - driver
