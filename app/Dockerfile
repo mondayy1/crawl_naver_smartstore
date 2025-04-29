@@ -8,5 +8,3 @@ COPY pyproject.toml poetry.lock* ./app/
 WORKDIR app
 RUN poetry self add poetry-plugin-shell \
     && poetry install
-
-CMD ["sleep", "infinity"]
