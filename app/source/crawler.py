@@ -85,6 +85,7 @@ for category, category_link in category_links.items():
             discount_rate = product_box.find_element(By.CLASS_NAME, "GGHHWiSIdf").text.split('%')[0]
             print("할인율: ", discount_rate)
         except:
+            discount_rate = 0
             print("No discount")
         
         discount_price = product_box.find_element(By.CLASS_NAME, "zOuEHIx8DC").text.split('원')[0]
@@ -94,6 +95,7 @@ for category, category_link in category_links.items():
             whole_price = product_box.find_element(By.CLASS_NAME, "_29otVMEvsN").text.split('\n')[1][:-1]
             print("원가: ", whole_price)
         except:
+            whole_price = 0
             print("No discount")
         
         name = product_box.find_element(By.CLASS_NAME, "_26YxgX-Nu5").text
@@ -116,6 +118,6 @@ for category, category_link in category_links.items():
         })
 
 df = pd.DataFrame(product_data)
-df.to_csv("naver_smartstore_products.csv", index=False)
+df.to_csv("naver_smartstore_products.csv", index=False, encoding="utf-8-sig")
 
 driver.quit()
