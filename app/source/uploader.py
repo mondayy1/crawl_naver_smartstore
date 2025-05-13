@@ -1,16 +1,8 @@
-import os
 import re
+from io import BytesIO
 
 import requests
 import pandas as pd
-from boto3 import client
-from dotenv import load_dotenv
-
-load_dotenv()
-
-bucket_name = os.environ.get("S3_BUCKET_NAME")
-local_file_path = "test.jpg"
-s3 = client("s3")
 
 df = pd.read_csv("naver_smartstore_products.csv")
 
@@ -27,10 +19,25 @@ for index, row in df.iterrows():
 
     print(category_first, category_second, name_sanitized, image_url, discount_rate, price_sell, price_whole, sep='\n')
 
-    image = requests.get(image_url)
+    api_url = "http://localhost:8000/products"
 
-    with open(local_file_path, "wb") as f:
-        f.write(image.content)
+    image_response = requests.get(image_url, timeout=10)
+    image_bytes = image_response.content
 
-    s3_file_name = f"products/{name_sanitized}/thumbnail.jpg"
-    s3.upload_file(local_file_path, bucket_name, s3_file_name)
+    files = {
+        "image_thumbnail": ("thumbnail.jpg", BytesIO(image_bytes), "image/jpeg"),
+        "image_detail": ("detail.jpg", BytesIO(image_bytes), "image/jpeg"),
+    }
+
+    data = {
+        "name": str(name_sanitized),
+        "price_whole": str(int(str(price_whole).replace(",", ""))),
+        "price_sell": str(int(str(price_sell).replace(",", ""))),
+        "discount_rate": str(int(str(discount_rate))),
+        "category_main": str(category_first),
+        "category_sub": str(category_second),
+    }
+
+    product = requests.post(url=api_url, data=data, files=files)
+
+    break

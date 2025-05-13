@@ -114,7 +114,6 @@ for category, category_link in category_links.items():
             "할인율(%)": discount_rate,
             "판매가(원)": discount_price,
             "원가(원)": whole_price,
-            "상세링크": product_info_link
         })
 
 df = pd.DataFrame(product_data)

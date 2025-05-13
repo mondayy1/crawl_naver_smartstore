@@ -1,0 +1,10 @@
+#ENV
+.env
+
+#MAC
+.DS_Store
+
+#DATA
+*.csv
+*.jpg
+
